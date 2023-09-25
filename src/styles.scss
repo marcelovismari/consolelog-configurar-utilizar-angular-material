@@ -1,0 +1,47 @@
+/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  height: 100%;
+
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.container {
+  display: grid;
+  margin: auto;
+  gap: 24px;
+  width: 1200px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+// *****************************************************
+// * Gera algumas classes CSS para ajudar no layout
+// * Por exemplo: ml-1, ml-2, ml-3 e ml-4
+// *****************************************************
+@for $i from 1 through 4 {
+  .ml-#{$i} {
+    margin-left: 8px * $i;
+  }
+
+  .mr-#{$i} {
+    margin-right: 8px * $i;
+  }
+
+  .mt-#{$i} {
+    margin-top: 8px * $i;
+  }
+
+  .mb-#{$i} {
+    margin-bottom: 8px * $i;
+  }
+
+  .m-#{$i} {
+    margin: 8px * $i;
+  }
+}

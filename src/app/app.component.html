@@ -1,0 +1,118 @@
+<mat-toolbar color="primary">
+  <span>Pesquisa de Frequência de Nomes</span>
+</mat-toolbar>
+
+<div class="container">
+  <form [formGroup]="formularioPesquisa" (ngSubmit)="pesquisar()">
+    <div>
+      <p>
+        Utilize o formulário abaixo para pesquisar a frequência de um nome entre
+        as décadas.
+      </p>
+      <p>
+        Os dados são obtidos da API do IBGE:
+        <a href="https://servicodados.ibge.gov.br" target="_blank">
+          https://servicodados.ibge.gov.br
+        </a>
+      </p>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Nome</mat-label>
+        <input
+          #inputNome
+          matInput
+          autofocus
+          autocomplete="off"
+          formControlName="nome"
+          placeholder="Digite um nome..."
+        />
+        <mat-error *ngIf="nomeFormularioPesquisa.hasError('required')">
+          Informe um nome para efetuar a busca
+        </mat-error>
+        <mat-error *ngIf="nomeFormularioPesquisa.hasError('minlength')">
+          Informe ao menos <strong>3</strong> caracteres
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="mt-1">
+      <button
+        mat-flat-button
+        [disabled]="formularioPesquisa.invalid"
+        color="primary"
+        type="submit"
+      >
+        Pesquisar
+      </button>
+      <button mat-flat-button (click)="reiniciarFormulario()" class="ml-2">
+        reset
+      </button>
+    </div>
+  </form>
+  <div *ngIf="dadosFrequenciaNome">
+    <div class="mt-1 mb-1">
+      Resultado da pesquisa pelo nome:
+      <strong>{{ dadosFrequenciaNome.nome }}</strong>
+    </div>
+
+    <table
+      mat-table
+      [dataSource]="dadosFrequenciaNome.res"
+      class="mat-elevation-z8"
+    >
+      <!-- Período -->
+      <ng-container matColumnDef="periodo">
+        <th mat-header-cell *matHeaderCellDef>Período</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.periodo }}
+        </td>
+      </ng-container>
+
+      <!-- Frequência -->
+      <ng-container matColumnDef="frequencia">
+        <th mat-header-cell *matHeaderCellDef>Frequência</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <ng-container
+            *ngIf="i > 0"
+            [ngTemplateOutlet]="
+              element.frequencia > dadosFrequenciaNome.res[i - 1].frequencia
+                ? setaAumento
+                : setaReducao
+            "
+          ></ng-container>
+
+          {{ element.frequencia | number }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="colunasDaTabela"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: colunasDaTabela"
+        (click)="mostrarModal(dadosFrequenciaNome.nome, row)"
+      ></tr>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="mostrarCarregando" class="loading">
+  <mat-spinner></mat-spinner>
+</div>
+
+<ng-template #setaAumento>
+  <mat-icon
+    color="primary"
+    aria-hidden="false"
+    aria-label="Aumento"
+    fontIcon="trending_up"
+  ></mat-icon>
+</ng-template>
+
+<ng-template #setaReducao>
+  <mat-icon
+    color="warn"
+    aria-hidden="false"
+    aria-label="Redução"
+    fontIcon="trending_down"
+  ></mat-icon>
+</ng-template>

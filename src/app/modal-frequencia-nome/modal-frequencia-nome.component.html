@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>{{ nome }}</h1>
+<div mat-dialog-content>
+  <div>
+    <p>
+      A frequência do nome
+      <strong>{{ nome }}</strong>
+      é {{ dados.frequencia | number }} entre o período de
+      <strong>{{ dados.periodo }}</strong>
+    </p>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button cdkFocusInitial mat-dialog-close>Fechar</button>
+</div>
